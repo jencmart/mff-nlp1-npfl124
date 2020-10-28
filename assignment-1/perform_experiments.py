@@ -23,7 +23,6 @@ def load_dataset(file_path):
         return word_list, lexicon, charset
 
 
-
 def compute_conditional_probability(w1_wm_probs, joint_probs, delim):
     """
     We want to estimate P(w_n | w_1, w_2 .. w_{n-1}) = P(w_1, w_2 .. w_{n-1}, w_n) / P(w_1, w_2 .. w_{n-1})
@@ -105,14 +104,7 @@ def compute_entropy_on_dataset(dataset, n, delim):
     # Compute conditional entropy of J ... H(J|I)
     cond_entrop = compute_conditional_entropy(prob_of_wn_given_I, joint_probs, delim)
 
-    # Finally, return it as a dataframe
-    col1, col2 = [], []
-    for k, w in cond_entrop.items():
-        col1.append(k)
-        col2.append(w)
-    df = pd.DataFrame.from_dict({"word": col1, "cond_entropy": col2})
-    df.sort_values(by='cond_entropy', ascending=False, na_position='first', inplace=True)
-    return df
+    return cond_entrop
 
 
 def char_mod(data, _, charset, prob):
@@ -125,7 +117,7 @@ def char_mod(data, _, charset, prob):
             else:
                 w_new += c
         new_dataset.append(w_new)
-    return  new_dataset
+    return new_dataset
 
 
 def word_mod(data, lexicon, _, prob):
@@ -144,10 +136,10 @@ parser.add_argument("--experiment_repeats", default=10, type=int, help="How many
 parser.add_argument("--n", default=1, type=int, help="On how many previous words would you like to condition...")
 parser.add_argument("--delim", default=" ", type=str, help="What delimiter to distinct words...")
 parser.add_argument("--target_dir", default="results", type=str, help="Where to put results...")
+parser.add_argument("--res_file", default="res.csv", type=str, help="csv with results...")
 
 if __name__ == "__main__":
     args = parser.parse_args([] if "__file__" not in globals() else None)
-    res_file = "res.csv"
 
     # DATASETS
     datasets = {"cz": "TEXTCZ1.txt", "en": "TEXTEN1.txt"}
@@ -159,10 +151,10 @@ if __name__ == "__main__":
     # <<< encode CZ dataset to UTF <<<
 
     # EXPERIMENTS
-    experiments = [{"name": "char-modif", "mess_probs": [0.0, 0.05, 0.01, 0.001, 0.0001, 0.00001] , "mess-f": char_mod},
-                   {"name": "word-modif", "mess_probs": [0.0, 0.05, 0.01, 0.001, 0.0001, 0.00001], "mess-f": word_mod}]
+    experiments = [{"name": "char-modif", "mess_probs": [0.0, 0.00001, 0.0001, 0.001, 0.01, 0.05, 0.1], "mess-f": char_mod},
+                   {"name": "word-modif", "mess_probs": [0.0, 0.00001, 0.0001, 0.001, 0.01, 0.05, 0.1], "mess-f": word_mod}]
 
-    res_csv = os.path.join(args.target_dir, res_file)
+    res_csv = os.path.join(args.target_dir, args.res_file)
     if os.path.isfile(res_csv):
         os.remove(res_csv)
 
@@ -171,29 +163,40 @@ if __name__ == "__main__":
         print("Dataset: {}".format(fname))
         dataset, lexicon, charset = load_dataset(os.path.join(args.dataset_dir, fname))
 
-        # ... perform each experiment ...
+        # ... Perform each experiment ...
         for experiment in experiments:
             for prob in experiment['mess_probs']:
                 print("\tExperiment: {}, Mess: {}\n\t\tRepeat:".format(experiment['name'], prob), end="")
 
-                # ... given number of times ...
+                # ... Repeat it given number of times ...
+                dict_10_run_avg = {}
                 for repeat_idx in range(args.experiment_repeats):
                     print("{},".format(repeat_idx), end="")
                     # ... and result of the experiment ...
                     modified_dataset = experiment['mess-f'](dataset, lexicon, charset, prob)
-                    df = compute_entropy_on_dataset(modified_dataset, args.n, args.delim)
+                    dic = compute_entropy_on_dataset(modified_dataset, args.n, args.delim)
+                    for k, v in dic.items():
+                        if k in dict_10_run_avg:
+                            dict_10_run_avg[k] = (dict_10_run_avg[k][0]+v, dict_10_run_avg[k][1] + 1)
+                        else:
+                            dict_10_run_avg[k] = (v, 1)
 
-                    # .. save to the file ...
-                    if not os.path.isdir(args.target_dir):
-                        os.mkdir(args.target_dir)
-                    if not os.path.isfile(res_csv):
-                        with open(res_csv, "w") as f:
-                            f.write("dataset,experiment,mess_prob,iteration,sum,min,max,avg\n")
-                    with open(res_csv, "a") as f:
-                        f.write("{},{},{},{},{},{},{},{}\n".format(lang, experiment['name'], prob, repeat_idx, df["cond_entropy"].sum(), df["cond_entropy"].min(),df["cond_entropy"].max(),df["cond_entropy"].mean()))
+                # ... And save it to file ...
+                if not os.path.isdir(args.target_dir):
+                    os.mkdir(args.target_dir)
+                if not os.path.isfile(res_csv):
+                    with open(res_csv, "w") as f:
+                        f.write("dataset,experiment,mess_prob,word,avg_1\n")
+                with open(res_csv, "a") as f:
+                    for k, v in dict_10_run_avg.items():
+                        if k == '"':
+                            k = '""""'
+                        else:
+                            k = k.replace('"', "'")
+                            k = '"' + k + '"'
+                        f.write("{},{},{},{},{}\n".format(lang,
+                                                             experiment['name'],
+                                                             prob,
+                                                             k, v[0]/args.experiment_repeats))
                 print("OK")
 
-    # FINALLY, TABULATE AND CREATE GRAPHS
-    res_csv = os.path.join(args.target_dir, res_file)
-    df = pd.read_csv(res_csv)
-    df.head()
