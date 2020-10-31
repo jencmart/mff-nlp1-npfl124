@@ -2,9 +2,8 @@ import argparse
 import math
 import os
 import random
-import pandas as pd
 
-from utils import load_dataset, encode_as_utf, compute_conditional_probability, compute_counts
+from utils import load_dataset, encode_as_utf, compute_conditional_probability, compute_counts, save_line_to_csv
 
 
 def compute_conditional_entropy(prob_of_wn_given_I, w1_wm_wn_probs, delim):
@@ -27,24 +26,22 @@ def compute_conditional_entropy(prob_of_wn_given_I, w1_wm_wn_probs, delim):
 
 def compute_entropy_on_dataset(dataset, n, delim):
     # count prob .. p(w1) = count(w1) / |dataset|
-    wrd_probs = compute_counts(dataset_list=dataset, n=n, delim=delim)
+    wrd_probs = compute_counts(data=dataset, n=n, delim=delim)
     # count prob .. p(w1, w2) = count(w1 w2) / |dataset - 1|
-    joint_probs = compute_counts(dataset_list=dataset, n=n + 1, delim=delim)  # n+1 words ...
+    joint_probs = compute_counts(data=dataset, n=n + 1, delim=delim)  # n+1 words ...
     # compute conditional prob  p(w2 | w1) = p(w1, w2) / p(w1)
-    prob_of_wn_given_I = compute_conditional_probability(w1_wm_probs=wrd_probs, joint_probs=joint_probs, delim=delim)
+    prob_of_wn_given_I = compute_conditional_probability(w1_wm_probs=wrd_probs, w1_wm_wn_probs=joint_probs, delim=delim)
     # Compute conditional entropy of J ... H(J|I)
-    cond_entrop = compute_conditional_entropy(prob_of_wn_given_I, joint_probs, delim)
-
-    return cond_entrop
+    return compute_conditional_entropy(prob_of_wn_given_I, joint_probs, delim)
 
 
-def char_mod(data, _, charset, prob):
+def char_mod(data, _, chrset, p):
     new_dataset = []
     for i, w in enumerate(data):
         w_new = ""
         for c in w:
-            if random.random() < prob:
-                w_new += random.choice(charset)
+            if random.random() < p:
+                w_new += random.choice(chrset)
             else:
                 w_new += c
         new_dataset.append(w_new)
@@ -113,20 +110,12 @@ if __name__ == "__main__":
                             dict_10_run_avg[k] = (v, 1)
 
                 # ... And save it to file ...
-                if not os.path.isdir(args.target_dir):
-                    os.mkdir(args.target_dir)
-                if not os.path.isfile(res_csv):
-                    with open(res_csv, "w") as f:
-                        f.write("dataset,experiment,mess_prob,word,avg_1\n")
-                with open(res_csv, "a") as f:
-                    for k, v in dict_10_run_avg.items():
-                        if k == '"':
-                            k = '""""'
-                        else:
-                            k = k.replace('"', "'")
-                            k = '"' + k + '"'
-                        f.write("{},{},{},{},{}\n".format(lang,
-                                                             experiment['name'],
-                                                             prob,
-                                                             k, v[0]/args.experiment_repeats))
+                for k, v in dict_10_run_avg.items():
+                    if k == '"':
+                        k = '""""'
+                    else:
+                        k = k.replace('"', "'")
+                        k = '"' + k + '"'
+                    s = "{},{},{},{},{}".format(lang, experiment['name'], prob, k, v[0]/args.experiment_repeats)
+                    save_line_to_csv(res_csv, s, csv_vals="dataset,experiment,mess_prob,word,avg_1")
                 print("OK")
