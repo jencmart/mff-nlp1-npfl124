@@ -1,88 +1,38 @@
-- 1. Entropy of a Text
-    - Determine the conditional entropy of the word distribution in a text given the previous word
-    - you need $$P(i,j)$$  ...probability that at any position in the text you will find the word i followed by the word j
-    - and $$P(j|i)$$ ... probability that after word i will be word j
-    - Then the conditional entropy of the word distribution in a text given the previous word is
-        - $$H(J|I) = - \sum_{i \in I,j \in J}P(i,j)\log_{2}P(j|i)H(J∣I)=− i∈I,j∈J ∑ ​     P(i,j)log 2 ​  P(j∣i)$$
-    - The perplexity is $$PX(P(J|I)) = 2^{H(J|I)}PX(P(J∣I))=2^{H(J|I)}$$  
-    - Do the follolowing for [TEXTEN1.txt](https://ufal.mff.cuni.cz/~pecina/courses/npfl067/data/TEXTEN1.txt) and for [TEXTCZ1.txt](https://ufal.mff.cuni.cz/~pecina/courses/npfl067/data/TEXTCZ1.txt)  
-        - Compute this conditional entropy and perplexity for the file [TEXTEN1.txt](https://ufal.mff.cuni.cz/~pecina/courses/npfl067/data/TEXTEN1.txt)  
-            - Every word on a separate line. (Punctuation is considered a word, as in many other cases.)
-            - The i,j above will also span sentence boundaries, where i is the last word of one sentence and j is the first word of the following sentence (but obviously, there will be a fullstop at the end of most sentences).
-        - Mess up the text - characters   + recalculate Conditional entropy 
-            - For every character in the text, mess it up with a likelihood of 10%. 
-            - If a character is chosen to be messed up, map it into a randomly chosen character from the set of characters that appear in the text. 
-            - Since there is some randomness to the outcome of the experiment, run the experiment 10 times, each time measuring the conditional entropy of the resulting text, and give the min, max, and average entropy from these experiments. 
-            - Be sure to use srand to reset the random number generator seed each time you run it. 
-            - Also, be sure each time you are messing up the original text, and not a previously messed up text.
-            - Do the same experiment for mess up likelihoods of 5%, 1%, .1%, .01%, and .001%.
-        - Mess up the text - whole words + recalculate Conditional entropy 
-            - Next, for every word in the text, mess it up with a likelihood of 10%. 
-            - If a word is chosen to be messed up, map it into a randomly chosen word from the set of words that appear in the text. 
-            - Again run the experiment 10 times, each time measuring the conditional entropy of the resulting text, and give the min, max, and average entropy from these experiments.
-            - Do the same experiment for mess up likelihoods of 5%, 1%, .1%, .01%, and .001%.
-    - Present the results
-        - Tabulate, graph and explain your results. 
-        - Also try to explain the differences between the two languages.
-        - To substantiate your explanations, you might want to tabulate also the basic characteristics of the two texts, such as the word count, number of characters (total, per word), the frequency of the most frequent words, the number of words with frequency 1, etc.
-        - Attach your source code commented in such a way that it is sufficient to read the comments to understand what you have done and how you have done it.
-        - Thought Experiment - Paper-and-pencil exercise
-            - Now assume two languages, L_1​ and L_2​ do not share any vocabulary items, and that the conditional entropy as described above of a text T_1​ in language L_1​ is EE and that the conditional entropy of a text T_2​ in language L_2​ is also EE. 
-            - Now make a new text by appending T_2T to the end of T_1​. 
-            - Will the conditional entropy of this new text be greater than, equal to, or less than EE? 
-    - Every word on a separate line. (Punctuation is considered a word, as in many other cases.)
-- 
-- 2. Cross-Entropy of Language Model
-    - This task will show you the importance of smoothing for language modeling, and in certain detail it lets you feel its effects.
-    - First, you will have to prepare data: take the same texts as in the previous task, i.e. TEXT EN1, TEXT CZ1
-    - Prepare 3 datasets out of each: 
-        - strip off the last 20,000 words and call them the **Test Data**  
-        - then take off the last 40,000 words from what remains, and call them the **Heldout Data** 
-        - and call the remaining data the **Training Data** 
-    - Here comes the coding:
-        - extract word counts from the training data so that you are ready to compute 
-        - unigram-, bigram- and trigram-based probabilities from them; 
-        - compute also the uniform probability based on the vocabulary size.
-        - ^^**Remember**^^ (T being the text size, and V the vocabulary size, i.e.
-            - the number of types - different word forms found in the training text):
-            - ![](https://remnote-user-data.s3.amazonaws.com/dDMBdPROzuTsAhWEqAwzyy0oyn3y20US978D6o01NJH7jqkkxlGwULzDcR1woebreoT4Jd2pZjZva3xrm_NdYdD46TcQN1b0gf076tt-nALRVOUBuLVRoLrFkj_xZpEX)
-        - ^^**Be careful;**^^ remember how to handle correctly the beginning and end of the training data with respect to bigram and trigram counts.
-    - Smoothing
-        - Now compute the four smoothing parameters (i.e. "coefficients", "weights", "lambdas", "interpolation parameters" or whatever, for the trigram, bigram, unigram and uniform distributions) from the heldout data using the EM algorithm. 
-        - (Then do the same using the training data again: what smoothing coefficients have you got? After answering this question, throw them away!) 
-        - ^^Remember^^, the smoothed model has the following form:
-            - ![](https://remnote-user-data.s3.amazonaws.com/26nHiUVccoZ0AkOojwtgjgTb-fhfDGHatS_ZzRPwBlHpJApp071KjXGNTubPJjiTdx0-vFKXTLN4irgME8AoL-O8KgStVz9st7QRRCUzDHcuTcQ6P_E9HJqInx3GDXdF) 
-                - >>> NOTE <<<
-                    - If you want to see the accents correctly, 
-                        - select ISO Latin 2 coding (charset=iso-8859-2) for viewing, 
-                        - but your programs obviously will (should) work in any case (supposing they are 8-bit clean).
-                        - You are of course free to convert everything to UTF-8.
-    - Compute Cross Entropy 
-        - And finally, compute the cross-entropy of the test data using your newly built, smoothed language model. 
-        - Now tweak the smoothing parameters in the following way: 
-            - add 10%, 20%, 30%, ..., 90%, 95% and 99% of the difference 
-            - between the trigram smoothing parameter and 1.0 to its value, 
-            - discounting at the same the remaining three parameters proportionally (remember, they have to sum up to 1.0!!). 
-            - Then set the trigram smoothing parameter to 90%, 80%, 70%, ... 10%, 0% of its value, 
-            - boosting proportionally the other three parameters, again to sum up to one. 
-            - Compute the cross-entropy on the test data for all these 22 cases 
-                - (original + 11 trigram parameter increase + 10 trigram smoothing parameter decrease). 
-            - Show results
-                - Tabulate, graph and explain what you have got. 
-                - Also, try to explain the differences between the two languages based on similar statistics as in the Task No. 2, plus the "coverage" graph (defined as the percentage of words in the test data which have been seen in the training data).
-                - Attach your source code commented in such a way that it is sufficient to read the comments to understand what you have done and how you have done it.
-- Smoothing
-    - Now compute the four smoothing parameters (i.e. "coefficients", "weights", "lambdas", "interpolation parameters" or whatever, for the trigram, bigram, unigram and uniform distributions) from the heldout data using the EM algorithm. 
-    - (Then do the same using the training data again: what smoothing coefficients have you got? After answering this question, throw them away!) 
-    - ^^Remember^^, the smoothed model has the following form:
-        - ![](https://remnote-user-data.s3.amazonaws.com/26nHiUVccoZ0AkOojwtgjgTb-fhfDGHatS_ZzRPwBlHpJApp071KjXGNTubPJjiTdx0-vFKXTLN4irgME8AoL-O8KgStVz9st7QRRCUzDHcuTcQ6P_E9HJqInx3GDXdF) 
-            - >>> NOTE <<<
-                - If you want to see the accents correctly, 
-                    - select ISO Latin 2 coding (charset=iso-8859-2) for viewing, 
-                    - but your programs obviously will (should) work in any case (supposing they are 8-bit clean).
-                    - You are of course free to convert everything to UTF-8.
-- >>> NOTE <<<
-    - If you want to see the accents correctly, 
-        - select ISO Latin 2 coding (charset=iso-8859-2) for viewing, 
-        - but your programs obviously will (should) work in any case (supposing they are 8-bit clean).
-        - You are of course free to convert everything to UTF-8.
+### Requirements
+* Scripts expect folder `./dataset` in which two files `TEXTEN1.txt` and `TEXTCZ1.txt` are located. (you can change the folder location by param `--dataset_dir`. But in this folder still must be the files `TEXTEN1.txt` and `TEXTCZ1.txt`
+
+
+* then you also need `python3` 
+
+### Part 1: Conditional Entropy of the text
+
+#### How to run the script
+```
+python3 ./text_entropy.py --dataset_dir path_to_dataset_folder
+```
+* script will create directory `results` with results in `res.csv`
+
+* it also creates `lang_stats.csv` where basic properties of the dataset are stored.
+
+#### Analysis of the results
+* There is Jupiter notebook `analysis-entropy-of-text.ipynb` with the analysis of the results.
+
+
+* I have also exported it to pdf: `analysis-entropy-of-text.pdf` 
+
+
+### Part 2: Cross Entropy
+
+#### How to run the script
+
+```
+python3 ./cross_entropy.py --dataset_dir path_to_dataset_folder
+```
+
+* script will print all the results and also create directory `results` with results in `cross-ent.csv.params` (found $\lambda$ params) and `cross-ent.csv` with cross-entropy results
+
+#### Analysis of the results
+* There is Jupiter notebook `analysis-cross-entropy.ipynb` with the analysis of the results.
+
+
+* I have also exported it to pdf: `analysis-cross-entropy.pdf`

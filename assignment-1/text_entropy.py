@@ -2,8 +2,10 @@ import argparse
 import math
 import os
 import random
-
-from utils import load_dataset, encode_as_utf, compute_conditional_probability, compute_counts, save_line_to_csv
+import pandas as pd
+import numpy as np
+from utils import load_dataset, encode_as_utf, compute_conditional_probability, compute_counts, save_line_to_csv, \
+    compute_ngram
 
 
 def compute_conditional_entropy(prob_of_wn_given_I, w1_wm_wn_probs, delim):
@@ -25,14 +27,12 @@ def compute_conditional_entropy(prob_of_wn_given_I, w1_wm_wn_probs, delim):
 
 
 def compute_entropy_on_dataset(dataset, n, delim):
-    # count prob .. p(w1) = count(w1) / |dataset|
-    wrd_probs = compute_counts(data=dataset, n=n, delim=delim)
     # count prob .. p(w1, w2) = count(w1 w2) / |dataset - 1|
-    joint_probs = compute_counts(data=dataset, n=n + 1, delim=delim)  # n+1 words ...
+    counts_2 = compute_counts(data=dataset, n=n + 1, delim=delim, max_n=n+1)  # n+1 words ...
     # compute conditional prob  p(w2 | w1) = p(w1, w2) / p(w1)
-    prob_of_wn_given_I = compute_conditional_probability(w1_wm_probs=wrd_probs, w1_wm_wn_probs=joint_probs, delim=delim)
+    bigram = compute_ngram(dataset, 2, delim=delim)
     # Compute conditional entropy of J ... H(J|I)
-    return compute_conditional_entropy(prob_of_wn_given_I, joint_probs, delim)
+    return compute_conditional_entropy(bigram, counts_2, delim)
 
 
 def char_mod(data, _, chrset, p):
@@ -57,6 +57,17 @@ def word_mod(data, lexicon, _, prob):
             new_dataset.append(w)
     return new_dataset
 
+
+def save_stats_about_dataset(dataset, lexicon, charset, lang_stats, lang):
+    unigram = compute_ngram(dataset, 1, delim=" ", start_op="<S>")
+    d = []
+    for k, v in unigram.items():
+        d.append(v * len(dataset))
+    aa = np.asarray(d)
+    s = "{},{},{},{},{},{},{},{},{}".format(lang, len(dataset), len(lexicon), len(charset), int(math.ceil(np.max(aa))),
+                                            int(np.quantile(aa, q=0.25)), int(np.quantile(aa, q=0.5)), int(np.quantile(aa, q=0.75)),
+                                            int(np.quantile(aa, q=0.95)))
+    save_line_to_csv(lang_stats, s, csv_vals="dataset,T,V,C,max,q25,q50,q75,q95")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--dataset_dir", default="dataset", type=str, help="Path to the dataset.")
@@ -86,11 +97,16 @@ if __name__ == "__main__":
     if os.path.isfile(res_csv):
         os.remove(res_csv)
 
+    lang_stats = os.path.join(args.target_dir, "lang-stats.csv")
+    if os.path.isfile(lang_stats):
+        os.remove(lang_stats)
+
     # ... On each dataset ...
     for lang, fname in datasets.items():
         print("Dataset: {}".format(fname))
         dataset, lexicon, charset = load_dataset(os.path.join(args.dataset_dir, fname))
-
+        # ... save some stats useful for analysis ...
+        save_stats_about_dataset(dataset, lexicon, charset, lang_stats, lang)
         # ... Perform each experiment ...
         for experiment in experiments:
             for prob in experiment['mess_probs']:
