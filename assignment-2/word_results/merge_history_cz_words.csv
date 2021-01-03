@@ -23,25 +23,39 @@ loss	cls_a	cls_b
 0.0165200358	{'by'}	{'do'}
 0.0172212023	{'i'}	{'je'}
 0.0184291685	{':'}	{'z'}
-0.0187382651	{')'}	{'OKD', 'listopadu'}
+0.0187382651	{')'}	{'listopadu', 'OKD'}
 0.0207948456	{'J', 'státu'}	{'s'}
-0.0213207398	{'nás', 'bylo'}	{'že'}
-0.0235298666	{'&slash;', 'NATO'}	{'('}
+0.0213035519	{'nás', 'bylo'}	{'že'}
+0.0235298666	{'NATO', '&slash;'}	{'('}
 0.0269168636	{'bude', 'musí'}	{'o'}
 0.0270673859	{'"'}	{'si', 'pouze'}
-0.0274230231	{'-'}	{'už', 'mezi'}
+0.0274230231	{'-'}	{'mezi', 'už'}
 0.0291266369	{'jsou', 'byl'}	{'se'}
 0.0296471988	{'však', 'být'}	{'na'}
 0.0326038658	{'a'}	{'které', 'který'}
-0.0336144636	{'při', 'zákona'}	{'v'}
+0.0336144636	{'zákona', 'při'}	{'v'}
 0.0379263050	{','}	{'budou', 'jako'}
 0.0385017124	{'.'}	{'?', 'před'}
-0.0441095367	{')', 'OKD', 'listopadu'}	{'ze', 'jeho'}
-0.0456508520	{'včera', 'od'}	{'po', 'ČSFR'}
-0.0464039218	{'a', 'které', 'který'}	{'ale', 'aby'}
-0.0570093582	{'"', 'si', 'pouze'}	{'u', 'za'}
-0.0662125018	{'už', '-', 'mezi'}	{'k', 'to'}
-0.0685126927	{',', 'budou', 'jako'}	{'Na', 'V'}
-0.0742391594	{'.', '?', 'před'}	{'ve', 'pro'}
-0.0931681913	{')', 'OKD', 'listopadu', 'ze', 'jeho'}	{'i', 'je'}
-0.0962680329	{',', 'Na', 'jako', 'V', 'budou'}	{'by', 'do'}
+0.0441095367	{'listopadu', ')', 'OKD'}	{'jeho', 'ze'}
+0.0456508520	{'včera', 'od'}	{'ČSFR', 'po'}
+0.0464102422	{'které', 'který', 'a'}	{'aby', 'ale'}
+0.0572678064	{'si', 'pouze', '"'}	{'za', 'u'}
+0.0661938237	{'-', 'mezi', 'už'}	{'to', 'k'}
+0.0704199009	{'budou', ',', 'jako'}	{'V', 'Na'}
+0.0742391594	{'?', '.', 'před'}	{'ve', 'pro'}
+0.0931638456	{'jeho', ')', 'OKD', 'listopadu', 'ze'}	{'i', 'je'}
+0.0949143468	{'budou', ',', 'V', 'jako', 'Na'}	{'nás', 'bylo', 'že'}
+0.0931009048	{'budou', ',', 'V', 'bylo', 'jako', 'Na', 'že', 'nás'}	{'by', 'do'}
+0.1028704154	{'které', 'aby', 'který', 'ale', 'a'}	{'včera', 'ČSFR', 'po', 'od'}
+0.1119167758	{'(', 'NATO', '&slash;'}	{'ve', '.', 'před', 'pro', '?'}
+0.1194717745	{'"', 'si', 'u', 'za', 'pouze'}	{':', 'z'}
+0.1321636571	{',', 'bylo', 'Na', 'do', 'nás', 'budou', 'V', 'jako', 'že', 'by'}	{'s', 'J', 'státu'}
+0.1693827984	{'jeho', 'i', 'je', ')', 'OKD', 'listopadu', 'ze'}	{'mezi', 'k', '-', 'už', 'to'}
+0.1920646782	{'včera', 'od', 'ČSFR', 'po', 'a', 'které', 'aby', 'který', 'ale'}	{'o', 'bude', 'musí'}
+0.2081741821	{',', 'bylo', 'Na', 'do', 'nás', 'budou', 'V', 'jako', 'že', 'státu', 'by', 'J', 's'}	{'jsou', 'se', 'byl'}
+0.2562081242	{':', 'z', '"', 'si', 'u', 'za', 'pouze'}	{'však', 'být', 'na'}
+0.2991442868	{',', 'bylo', 'se', 'Na', 'do', 'nás', 'byl', 'budou', 'V', 'jsou', 'jako', 'že', 'státu', 'by', 'J', 's'}	{'zákona', 'při', 'v'}
+0.3303851803	{'jeho', 'je', 'mezi', ')', 'k', 'listopadu', 'ze', '-', 'už', 'to', 'i', 'OKD'}	{'včera', 'od', 'ČSFR', 'po', 'musí', 'a', 'které', 'aby', 'který', 'ale', 'bude', 'o'}
+0.4284573669	{'na', '"', 'u', 'však', ':', 'z', 'být', 'si', 'za', 'pouze'}	{'se', 'Na', 'byl', 'budou', 'V', 'jsou', 'zákona', 'že', 'by', 'J', ',', 'bylo', 'v', 'do', 'nás', 'při', 'jako', 'státu', 's'}
+0.7757462976	{'před', 'pro', '&slash;', '(', 'NATO', 've', '.', '?'}	{'jeho', 'je', ')', 'listopadu', 'už', 'a', 'které', 'aby', 'který', 'OKD', 'ale', 'bude', 'včera', 'mezi', 'od', 'k', 'ČSFR', 'ze', '-', 'po', 'musí', 'to', 'i', 'o'}
+1.1352635637	{'se', '"', 'Na', 'byl', 'budou', 'V', 'jsou', 'zákona', 'že', 'si', 'by', 'pouze', 'J', ',', 'na', 'bylo', 'v', 'u', 'však', 'do', 'nás', ':', 'z', 'být', 'při', 'jako', 'státu', 'za', 's'}	{'jeho', ')', 'a', 'ale', 'bude', 'před', 'k', 'ze', 'po', 'musí', 'to', '(', 've', '?', 'je', 'listopadu', 'už', 'které', 'aby', '.', 'který', 'OKD', 'včera', 'mezi', 'od', 'pro', '&slash;', 'ČSFR', '-', 'i', 'NATO', 'o'}

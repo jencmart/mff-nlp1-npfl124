@@ -1,5 +1,7 @@
 import errno
 import os
+import pickle
+
 import numpy as np
 from utils import *
 
@@ -17,9 +19,19 @@ def init_bigram_counts(word_ID_dict, data_list):
 
 
 def compute_qk(c_x1x2, c_x1, c_x2, n):
-    if c_x1x2 == 0:
+    if c_x1x2 == 0 or c_x1 == 0 or c_x2 == 0:
         return 0
     return (c_x1x2 / n) * np.log2((c_x1x2 * n) / (c_x1 * c_x2))
+
+
+def compute_qk_ij_r(i, j, r, counts, n):
+    ck, ck_l, ck_r =counts
+    return compute_qk(ck[i, r] + ck[j, r], ck_l[i] + ck_l[j], ck_r[r], n)
+
+
+def compute_qk_L_ij(l, i, j, counts, n):
+    ck, ck_l, ck_r = counts
+    return compute_qk(ck[l, i] + ck[l, j], ck_l[l], ck_r[i] + ck_r[j], n)
 
 
 def compute_adds(ck, ck_l, ck_r, a, b, n):
@@ -27,11 +39,11 @@ def compute_adds(ck, ck_l, ck_r, a, b, n):
     # q(L , a+b)
     for left in range(ck.shape[0]):
         if left != a and left != b:
-            adds += compute_qk(ck[left, a] + ck[left, b], ck_l[left], ck_r[a] + ck_r[b], n)
+            adds += compute_qk_L_ij(left, a, b, (ck, ck_l, ck_r), n)
     # q(a+b, R)
     for right in range(ck.shape[1]):
         if right != a and right != b:
-            adds += compute_qk(ck[a, right] + ck[b, right], ck_l[a] + ck_l[b], ck_r[right], n)
+            adds += compute_qk_ij_r(a, b, right, (ck, ck_l, ck_r), n)
     # q(a+b, a+b)
     adds += compute_qk(ck[a, a] + ck[a, b] + ck[b, b] + ck[b, a], ck_l[a] + ck_l[b], ck_r[a] + ck_r[b], n)
     return adds
@@ -74,7 +86,7 @@ class Classes:
 
     def save_history_and_merge(self, min_loss, best_a, best_b):
         self.history.append((min_loss, self._get_words(best_a), self._get_words(best_b)))
-        print("{:.10f}".format(min_loss), self._get_words(best_a), self._get_words(best_b), sep="\t")
+        print(self._get_words(best_a), self._get_words(best_b), sep="\t") # "{:.10f}".format(min_loss),
         self._merge_classes(best_a, best_b)
 
     def getMergedIDs(self):
@@ -85,8 +97,9 @@ def initialize(data, ignored):
     # n: lexicon size ----------------------->>> O(n log n)
     initial_word_clsID = {w: i for i, w in enumerate(sorted(list(set(data))))}  # w1:0 w2:1 w3:2
     WC = Classes(initial_word_clsID, ignored)
-    print("lexicon size (without ignored): {}".format(len(initial_word_clsID) - len(WC.ignored_classes)))
-
+    print("--------------------")
+    print("initial classes: {}".format(len(initial_word_clsID) - len(WC.ignored_classes)))
+    print("------ MERGES ------")
     n = len(data) - 1  # without <S>
 
     # 1. ck: bi counts ----------------------->>> O(n)
@@ -110,7 +123,7 @@ def initialize(data, ignored):
     # assert sk.shape[0] == qk.shape[0] == qk.shape[1] == ck.shape[0] == ck.shape[1] == ck_l.shape[0] == ck_r.shape[0]
 
     # 5. lk: losses --------------------------->>> O(n^3)
-    lk = np.ones(ck.shape)  # upper triangle (without diagonal)
+    lk = np.zeros(ck.shape)  # upper triangle (without diagonal)
     min_loss, best_a, best_b = None, None, None
     for idx, a in enumerate(WC.getNotIgnoredClasses()):
         for b in WC.getNotIgnoredClasses()[idx + 1:]:  # >>> adds == O(n)
@@ -121,79 +134,131 @@ def initialize(data, ignored):
 
     # 6. save first history
     WC.save_history_and_merge(min_loss, best_a, best_b)
+    I = np.sum(qk)
+    return (ck, ck_l, ck_r), qk, sk, lk, I, min_loss, best_a, best_b, WC, n
 
-    return ck, ck_l, ck_r, qk, sk, lk, best_a, best_b, WC, n
+
+# TODO >>>>>>> UPDATES >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+def update_ck(ck, best_a, best_b, WC):
+    ck_1 = np.copy(ck)
+
+    ck_1[best_a, :] = ck[best_a, :] + ck[best_b, :]
+    ck_1[:, best_a] = ck[:, best_a] + ck[:, best_b]
+    ck_1[best_b, :], ck_1[:, best_b] = 0, 0
+    # assert (OK) - previously merged columns/rows are zero
+    # for idx in list(WC.merged_ids):
+    #     assert np.sum(ck_1[idx, :]) == 0
+    #     assert np.sum(ck_1[:, idx]) == 0
+
+    ck_l_1 = np.sum(ck_1, axis=1)
+    ck_r_1 = np.sum(ck_1, axis=0)
+
+    return ck_1, ck_l_1, ck_r_1
 
 
-def compute_new_qk(qk, ck, ck_l, ck_r, N, best_b):
-    qk_new = np.zeros(qk.shape)
-    for a in range(ck.shape[0]):
-        for b in range(ck.shape[1]):
-            if a != best_b and b != best_b:
-                qk_new[a, b] = compute_qk(ck[a, b], ck_l[a], ck_r[b], N)
-            else:
-                qk_new[a, b] = 0  # qk[a, b]  # ??? todo .. 0 ?  # 0  #
+def update_qk(qk, counts_1, N, WC, best_a, best_b):
+    ck_1, ck_l_1, ck_r_1 = counts_1
+
+    qk_new = np.copy(qk)
+    for a in range(ck_1.shape[0]):
+        for b in range(ck_1.shape[1]):
+            # if a != best_b and b != best_b: -- else by mela byt 0, ale o to se postara ten count ( uz ma 0 v sobe )
+            qk_new[a, b] = compute_qk(ck_1[a, b], ck_l_1[a], ck_r_1[b], N)
+
+    # assert - point-wise-MU of previously merged columns/rows is zero
+    # for idx in list(WC.merged_ids):
+    #     assert np.sum(qk_new[idx, :]) == 0
+    #     assert np.sum(qk_new[:, idx]) == 0
+
     return qk_new
 
 
+def update_qk_second_option(qk, best_a, best_b, counts, N, WC):
+    qk_new = np.copy(qk)
+    for x in range(qk.shape[0]):
+        # [best_a, x] = best_a + best_b, x
+        # [x, best_a] = x, best_a + best_b
+        qk_new[best_a, x] = compute_qk_ij_r(best_a, best_b, x, counts, N)
+        qk_new[x, best_a] = compute_qk_ij_r(x, best_a, best_b, counts, N)
+    qk_new[best_b, :] = 0
+    qk_new[:, best_b] = 0
+    return qk_new
+
+
+def update_sk(qk_1, WC):
+    # by updating sk(i) for all i != b
+    sk_1 = np.sum(qk_1, axis=0) + np.sum(qk_1, axis=1) - np.diag(qk_1)
+    # for idx in list(WC.merged_ids):
+    #     assert sk_1[idx] == 0
+
+    return sk_1
+
+
+def update_sk_second_option(sk, qk, qk_1, best_a, best_b, WC):
+    sk_1 = np.zeros(qk.shape[0])
+    for i in range(sk_1.shape[0]):
+        if i in WC.merged_ids:
+            sk_1[i] = 0
+        else:
+            sk_1[i] = sk[i] - qk[i, best_a] - qk[best_a, i] - qk[i, best_b] - qk[best_b, i] + qk_1[i, best_a]
+    return sk_1
+# TODO <<<<<<< UPDATES <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
 def compute_classes_greedy(data, ignored, stop_at):
-    # 1.-6. ----------------------------------->>> O(n^3)
-    ck, ck_l, ck_r, qk, sk, lk, best_a, best_b, WC, N = initialize(data, ignored)
-    # pickle.dump((ck, ck_l, ck_r, qk, sk, lk, best_a, best_b, WC, N), open("save.p", "wb"))
-    # ck, ck_l, ck_r, qk, sk, lk, best_a, best_b, WC, N = pickle.load(open("save.p", "rb"))
-    print("...init done...")
+
+    # 1.-6. INITIALIZE --------------------------->>> O(n^3)
+    counts, qk, sk, lk, I, min_loss, best_a, best_b, WC, N = initialize(data, ignored)
+    # pickle.dump((counts, qk, sk, lk, I, min_loss, best_a, best_b, WC, N), open("save.p", "wb"))
+
+    # counts, qk, sk, lk, I, min_loss, best_a, best_b, WC, N = pickle.load(open("save.p", "rb"))
+    # print("...init done...")
 
     while True:
         remaining = len(WC.getNotIgnoredClasses())
-        print("remaining: {}".format(remaining - stop_at))
-        if remaining == 1 or stop_at is not None and stop_at == remaining:
+        if stop_at == remaining:
             break
 
-        # 6.5 - Update counts ------------------->>> O(n)
-        ck_1, ck_l_1, ck_r_1 = ck, ck_l, ck_r
+        # 6.5 - Update counts ------------------->>> O(n) copied (OK)
+        counts_1 = update_ck(counts[0], best_a, best_b, WC)
 
-        ck_1[best_a, :] = ck[best_a, :] + ck[best_b, :]
-        ck_1[:, best_a] = ck[:, best_a] + ck[:, best_b]
-        ck_1[best_b, :], ck_1[:, best_b] = 0, 0
-        ck_1[list(WC.merged_ids), :], ck_1[:, list(WC.merged_ids)] = 0, 0   # just safety fallback
-        ck_l_1, ck_r_1 = np.sum(ck, axis=1), np.sum(ck, axis=0)
+        # 7. update qk -------------------------->>> O(n^2) completely recomputed (OK)
+        qk_1 = update_qk(qk, counts_1, N, WC, best_a, best_b)
+        # qk_1 = update_qk_second_option(qk, best_a, best_b, counts, N, WC)
+        print("I': {:.10f} - {:.10f} = {:.10f} (sum(q')-I'={:.5f})".format(I, min_loss, I - min_loss, np.sum(qk_1) - (I - min_loss)))
+        I = I - min_loss
+        print("---------------------------------------------------------------------remaining classes: {}".format(remaining - stop_at+1))
 
-        # 7. update qk to q_{k-1}  -------------->>> O(n^2)
-        qk_1 = compute_new_qk(qk, ck_1, ck_l_1, ck_r_1, N, best_b)
-
-        # 8. get s_{k-1} by updating sk(i) for all i != b
-        sk_1 = np.sum(qk_1, axis=0) + np.sum(qk_1, axis=1) - np.diag(qk_1)
-
-        # just safety fallback
-        sk_1[list(WC.merged_ids)] = 0
-        qk_1[list(WC.merged_ids), :] = 0
-        qk_1[:, list(WC.merged_ids)] = 0
+        # 8. update sk -------------------------->>> O(n) completely recomputed (OK)
+        sk_1 = update_sk(qk_1, WC)
+        # sk_1 = update_sk_second_option(sk, qk, qk_1, best_a, best_b, WC)
 
         # 9., 10. update losses + save minimal loss of MI and new best_a best_b
-        lk_1 = np.ones(lk.shape)  # upper triangle (without diagonal)
+        lk_1 = np.zeros(lk.shape)  # upper triangle (without diagonal)
         old_best_a, old_best_b, min_loss, best_a, best_b = best_a, best_b, None, None, None
+
         for idx, i in enumerate(WC.getNotIgnoredClasses()):
             for j in WC.getNotIgnoredClasses()[idx + 1:]:  # >>> adds == O(n)
                 if i == old_best_a or j == old_best_a:
+                    assert i != j
                     # difference in sk ... substitutions
-                    lk_1[i, j] = lk[i, j] - sk[i] + sk_1[i] - sk[j] + sk_1[j]
+                    lk_1[i, j] = lk[i, j] - sk[i] + sk_1[i] - sk[j] + sk_1[j]  # ok ...........
 
                     # Difference in additions? ... # q(L , a+b)  q(a+b, R) q(a+b,a+b)
                     # + qk(i+j,a)
-                    lk_1[i, j] += compute_qk(ck[i, old_best_a] + ck[j, old_best_a], ck_l[i] + ck_l[j], ck_r[old_best_a], N)
+                    lk_1[i, j] += compute_qk_ij_r(i, j, old_best_a, counts, N)  # ok ...........
                     # + qk(a, i+j)
-                    lk_1[i, j] += compute_qk(ck[old_best_a, i] + ck[old_best_a, j], ck_l[old_best_a], ck_r[i] + ck_r[j], N)
+                    lk_1[i, j] += compute_qk_L_ij(old_best_a, i, j, counts, N)  # ok ...........
                     # + qk(i+j, b)
-                    lk_1[i, j] += compute_qk(ck[i, old_best_b] + ck[j, old_best_b], ck_l[i] + ck_l[j], ck_r[old_best_b], N)
+                    lk_1[i, j] += compute_qk_ij_r(i, j, old_best_b, counts, N)  # ok ...........
                     # + qk(b, i+j)
-                    lk_1[i, j] += compute_qk(ck[old_best_b, i] + ck[old_best_b, j], ck_l[old_best_b], ck_r[i] + ck_r[j], N)
+                    lk_1[i, j] += compute_qk_L_ij(old_best_b, i, j, counts, N)  # ok ...........
 
                     # intersection for sk ?
                     # - qk_1(i+j, a)
-                    lk_1[i, j] -= compute_qk(ck_1[i, old_best_a] + ck_1[j, old_best_a], ck_l_1[i] + ck_l_1[j], ck_r_1[old_best_a], N)
+                    lk_1[i, j] -= compute_qk_ij_r(i, j, old_best_a, counts_1, N)  # ok ........... (b is 0 so not needed)
                     # - qk_1(a, i+j)
-                    lk_1[i, j] -= compute_qk(ck_1[old_best_a, i] + ck_1[old_best_a, j], ck_l_1[old_best_a], ck_r_1[i] + ck_r_1[j], N)
-
+                    lk_1[i, j] -= compute_qk_L_ij(old_best_a, i, j, counts_1, N)  # ok ........... (b is 0 so not needed)
                 else:
                     lk_1[i, j] = lk[i, j]
                 if min_loss is None or lk_1[i, j] < min_loss:
@@ -204,9 +269,8 @@ def compute_classes_greedy(data, ignored, stop_at):
 
         # 12. qk sk lk = new ones
         qk, sk, lk = qk_1, sk_1, lk_1
-        ck, ck_l, ck_r = ck_1, ck_l_1, ck_r_1
-        # I = np.sum(qk)
-        # print(I)
+        counts = (np.copy(counts_1[0]), np.copy(counts_1[1]), np.copy(counts_1[2]))
+
     return WC
 
 
@@ -285,7 +349,9 @@ if __name__ == "__main__":
     ]
     for experiment in experiments:
         for lang, file_name in datasets.items():
-            print("Dataset: {}".format(file_name))
+            print("-----------------------------------------------------------------------------")
+            print("-----------------------------------------------------------------------------")
+            print("Experiment:{}".format("[file:{}, type:{}, stop:{}]".format(file_name, experiment['name'], experiment['cnt_classes_stop']) ))
             part = 0 if experiment['name'] == "words" else 1
             dataset, _, _ = load_dataset(os.path.join(dataset_dir, file_name), part=part)
 
@@ -295,14 +361,16 @@ if __name__ == "__main__":
             # occurring x-times in 8k !!
             _, ignored = filter_occurs(dataset, experiment['min_occurs'])
 
+            # CALCULATE...
             extra_symb = "<S>"
             dataset.insert(0, extra_symb)
             ignored.add(extra_symb)
             word_cls_obj = compute_classes_greedy(dataset, ignored, stop_at=experiment['cnt_classes_stop'])
 
-            filename = "word_results/" + "merge_history_" + lang + "_" + experiment["name"] + ".csv"
-            save_merge_history(word_cls_obj, filename)
-
-            if 'words_to_classes' in experiment:
+            # SAVE...
+            if 'words_to_classes' not in experiment:
+                filename = "word_results/" + "merge_history_" + lang + "_" + experiment["name"] + ".csv"
+                save_merge_history(word_cls_obj, filename)
+            else:
                 filename = "word_results/" + "words_in_classes_"  + lang + "_" + experiment["name"] + "_cls:" + str(experiment['cnt_classes_stop'])  + ".csv"
                 save_words_with_classes(word_cls_obj, filename)

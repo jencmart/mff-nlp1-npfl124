@@ -9,28 +9,28 @@ loss	cls_a	cls_b
 0.0017445191	{'JJ'}	{'JJS'}
 0.0023180377	{'WP$', 'RBR', 'JJR'}	{'RBS'}
 0.0026830121	{'DT'}	{'PRP$'}
-0.0032408943	{'"', 'WP'}	{'WRB'}
-0.0040703093	{'NNPS', 'SYM'}	{'NNS'}
+0.0032182774	{'WP', '"'}	{'WRB'}
+0.0037366437	{'NNPS', 'SYM'}	{'NNS'}
 0.0064522540	{'VBD'}	{'VBN'}
 0.0065769669	{','}	{':'}
-0.0072805492	{'CD'}	{'JJ', 'JJS'}
+0.0074798946	{'CD'}	{'VBG'}
 0.0081993286	{'VBP'}	{'VBZ'}
-0.0107639394	{'"', 'WRB', 'WP'}	{'VBG'}
-0.0133769477	{'"', 'WRB', 'WP', 'VBG'}	{'WDT'}
-0.0168859827	{'WP$', 'RBR', 'JJR', 'RBS'}	{'RB'}
-0.0258612285	{'"', 'WRB', 'WDT', 'WP', 'VBG'}	{'VB'}
-0.0294619817	{'MD'}	{'TO'}
-0.0444304026	{'CC'}	{'IN'}
-0.0627429627	{'TO', 'MD'}	{'VBZ', 'VBP'}
-0.0774177738	{'FW', 'NNP'}	{'NN'}
-0.0941446752	{'(', '.'}	{',', ':'}
-0.1049143255	{'PRP$', 'DT'}	{'PRP', 'EX'}
-0.1370107820	{'"', 'WRB', 'WDT', 'VB', 'WP', 'VBG'}	{'PRP$', 'DT', 'EX', 'PRP'}
-0.1610286169	{'TO', 'MD', 'VBZ', 'VBP'}	{'VBN', 'VBD'}
-0.2255893063	{'RBR', 'WP$', 'JJR', 'RB', 'RBS'}	{'NNPS', 'SYM', 'NNS'}
-0.2859347033	{',', '(', '.', ':'}	{'VBP', 'TO', 'MD', 'VBZ', 'VBN', 'VBD'}
-0.4616337115	{'CD', 'JJ', 'JJS'}	{'SYM', 'RBR', 'NNS', 'NNPS', 'WP$', 'JJR', 'RB', 'RBS'}
-0.7845370440	{'"', 'EX', 'VB', 'WP', 'VBG', 'WRB', 'PRP', 'WDT', 'PRP$', 'DT'}	{'FW', 'NNP', 'NN'}
-0.8020557396	{',', '.', 'VBP', '(', 'MD', 'VBZ', ':', 'VBD', 'TO', 'VBN'}	{'IN', 'CC'}
-1.2777053199	{'"', 'FW', 'EX', 'VB', 'WP', 'VBG', 'NN', 'WRB', 'PRP', 'NNP', 'WDT', 'PRP$', 'DT'}	{'RBR', 'NNS', 'JJR', 'SYM', 'RB', 'JJS', 'RBS', 'CD', 'WP$', 'NNPS', 'JJ'}
-3.3700848287	{'FW', 'RBR', 'NNS', 'JJR', 'RB', 'WP', 'NN', 'WRB', 'NNP', 'NNPS', 'WP$', 'PRP$', 'DT', '"', 'EX', 'SYM', 'RBS', 'WDT', 'VBG', 'JJS', 'CD', 'VB', 'JJ', 'PRP'}	{',', '.', 'VBP', '(', 'MD', 'VBZ', ':', 'VBD', 'IN', 'TO', 'VBN', 'CC'}
+0.0102832126	{'WP', 'WRB', '"'}	{'CC'}
+0.0103756806	{'VBG', 'CD'}	{'JJS', 'JJ'}
+0.0163306621	{'WP$', 'RBR', 'JJR', 'RBS'}	{'RB'}
+0.0206376771	{'MD'}	{'WDT'}
+0.0274107640	{'MD', 'WDT'}	{'TO'}
+0.0355273624	{'NNP', 'FW'}	{'IN'}
+0.0517515654	{'VB'}	{'VBZ', 'VBP'}
+0.0669974019	{'WP', 'CC', 'WRB', '"'}	{'NN'}
+0.0847877315	{'(', '.'}	{'MD', 'WDT', 'TO'}
+0.0960771027	{'DT', 'PRP$'}	{'WP$', 'JJR', 'RBR', 'RBS', 'RB'}
+0.1063300662	{'WP$', 'JJR', 'DT', 'RBR', 'RBS', 'RB', 'PRP$'}	{'EX', 'PRP'}
+0.1103433214	{':', ','}	{'VBD', 'VBN'}
+0.1653376815	{'EX', 'DT', 'PRP', 'RBS', 'RB', 'WP$', 'JJR', 'RBR', 'PRP$'}	{'NNPS', 'NNS', 'SYM'}
+0.1689430143	{'(', '.', 'MD', 'WDT', 'TO'}	{'EX', 'DT', 'PRP', 'NNS', 'SYM', 'RBS', 'RB', 'WP$', 'NNPS', 'JJR', 'RBR', 'PRP$'}
+0.1919908473	{':', ',', 'VBD', 'VBN'}	{'VBZ', 'VB', 'VBP'}
+0.3477403891	{':', ',', 'VBD', 'VB', 'VBP', 'VBZ', 'VBN'}	{'VBG', 'JJS', 'JJ', 'CD'}
+0.4479165284	{'CC', 'NN', '"', 'WP', 'WRB'}	{'NNP', 'IN', 'FW'}
+0.7537486909	{'FW', 'CC', 'NN', 'IN', '"', 'NNP', 'WP', 'WRB'}	{',', 'JJS', 'CD', 'VBP', 'VBG', ':', 'VBD', 'VB', 'JJ', 'VBZ', 'VBN'}
+1.3637253768	{'JJS', '"', 'VBP', 'VBG', 'JJ', 'FW', 'NNP', 'WP', 'VBZ', ',', 'CC', 'IN', 'CD', 'WRB', ':', 'VBD', 'NN', 'VB', 'VBN'}	{'EX', 'DT', 'PRP', 'MD', 'WDT', 'RBS', 'WP$', 'NNPS', '.', 'NNS', 'RBR', 'PRP$', 'SYM', 'RB', 'TO', '(', 'JJR'}

@@ -41,58 +41,72 @@ loss	cls_a	cls_b
 0.0110549925	{'our'}	{'several'}
 0.0128618444	{'for'}	{'under'}
 0.0143420305	{'some'}	{'this'}
-0.0148445584	{'individuals', 'structure'}	{'species'}
+0.0148445584	{'structure', 'individuals'}	{'species'}
 0.0149823596	{'has'}	{'with'}
-0.0160459692	{'case', 'subject'}	{'same'}
+0.0160459692	{'subject', 'case'}	{'same'}
 0.0162945255	{'there', 'It'}	{'it'}
 0.0166421131	{'less', 'even'}	{'on'}
-0.0168569219	{'differ', 'what'}	{'or'}
-0.0172980941	{')', 'cases'}	{'not'}
-0.0184809069	{'been'}	{'manner', 'such'}
+0.0168569219	{'what', 'differ'}	{'or'}
+0.0172980941	{'cases', ')'}	{'not'}
+0.0184809069	{'been'}	{'such', 'manner'}
 0.0185644627	{'by'}	{'how', 'nearly'}
 0.0194992126	{'believe', 'do'}	{'have'}
 0.0196058311	{'(', 'than'}	{'are'}
 0.0202321974	{'as'}	{'which'}
-0.0207254771	{';'}	{'short', 'slight'}
+0.0207254771	{';'}	{'slight', 'short'}
 0.0212025691	{'be'}	{'only', 'me'}
-0.0225859455	{'a'}	{'distinct', 'certain'}
-0.0236874147	{'from'}	{'shall', 'see'}
-0.0242688066	{'breeds', 'state'}	{'nature', 'variation'}
-0.0256979796	{'I'}	{'very', 'often'}
-0.0261445826	{'between', ':'}	{'is'}
+0.0225859455	{'a'}	{'certain', 'distinct'}
+0.0236777771	{'from'}	{'see', 'shall'}
+0.0242688066	{'state', 'breeds'}	{'variation', 'nature'}
+0.0256979796	{'I'}	{'often', 'very'}
+0.0261445826	{':', 'between'}	{'is'}
 0.0281347388	{'when', 'if'}	{'that'}
-0.0290188645	{'and'}	{'but', 'so'}
+0.0292089745	{'and'}	{'so', 'but'}
 0.0294035578	{'each', 'these'}	{'the'}
-0.0310076903	{'can', 'must'}	{'to'}
-0.0314142703	{'great', 'my'}	{'in'}
-0.0332552017	{'.'}	{'different', 'its'}
-0.0339379568	{'such', 'manner', 'been'}	{'varieties', 'races'}
-0.0381144622	{'an', 'any'}	{'facts', 'plants'}
-0.0394518822	{'domestic', 'domesticated'}	{'many', 'most'}
-0.0417727712	{'much', 'long'}	{'more', 'would'}
-0.0428256352	{','}	{'cannot', 'may'}
-0.0448038404	{'.', 'different', 'its'}	{'conditions', 'wild'}
-0.0451065935	{'by', 'nearly', 'how'}	{'shall', 'from', 'see'}
-0.0457790546	{'will', 'could'}	{'of'}
-0.0471993549	{',', 'cannot', 'may'}	{'at', 'animals'}
-0.0479586008	{')', 'cases', 'not'}	{'.', 'wild', 'its', 'conditions', 'different'}
-0.0484632674	{'a', 'distinct', 'certain'}	{'one', 'other'}
-0.0527309460	{'only', 'be', 'me'}	{'varieties', 'races', 'manner', 'been', 'such'}
-0.0532442779	{'short', 'slight', ';'}	{'facts', 'plants', 'an', 'any'}
-0.0545008600	{'very', 'often', 'I'}	{'they', 'we'}
-0.0572211767	{',', 'cannot', 'at', 'may', 'animals'}	{'breeds', 'nature', 'state', 'variation'}
-0.0439209869	{',', 'cannot', 'at', 'may', 'breeds', 'nature', 'variation', 'state', 'animals'}	{'The', 'In'}
-0.0513607884	{',', 'cannot', 'at', 'may', 'In', 'breeds', 'nature', 'The', 'variation', 'state', 'animals'}	{'all', 'their'}
-0.0516510798	{',', 'cannot', 'at', 'all', 'may', 'In', 'breeds', 'nature', 'their', 'The', 'variation', 'state', 'animals'}	{'case', 'same', 'subject'}
-0.0509350769	{',', 'cannot', 'at', 'all', 'may', 'In', 'subject', 'breeds', 'case', 'nature', 'their', 'The', 'same', 'variation', 'state', 'animals'}	{'species', 'individuals', 'structure'}
-0.0525116880	{',', 'cannot', 'may', 'In', 'breeds', 'nature', 'The', 'variation', 'at', 'all', 'subject', 'case', 'their', 'same', 'species', 'individuals', 'structure', 'state', 'animals'}	{'our', 'several'}
-0.0602631844	{',', 'cannot', 'may', 'In', 'breeds', 'nature', 'several', 'The', 'variation', 'at', 'all', 'subject', 'case', 'their', 'same', 'species', 'individuals', 'structure', 'our', 'state', 'animals'}	{'many', 'most', 'domestic', 'domesticated'}
-0.0682747955	{'for', 'under'}	{'with', 'has'}
-0.0689234248	{',', 'cannot', 'may', 'In', 'breeds', 'most', 'nature', 'several', 'The', 'variation', 'domesticated', 'at', 'all', 'subject', 'case', 'their', 'many', 'same', 'species', 'individuals', 'structure', 'domestic', 'our', 'state', 'animals'}	{'it', 'there', 'It'}
-0.0767649800	{'a', 'distinct', 'other', 'one', 'certain'}	{'this', 'some'}
-0.0789034308	{'(', 'are', 'than'}	{',', 'cannot', 'may', 'In', 'breeds', 'most', 'nature', 'it', 'several', 'there', 'The', 'It', 'variation', 'domesticated', 'at', 'all', 'subject', 'case', 'their', 'many', 'same', 'species', 'individuals', 'structure', 'domestic', 'our', 'state', 'animals'}
-0.0799509021	{'but', 'and', 'so'}	{'on', 'less', 'even'}
-0.0905868283	{'short', 'plants', 'an', 'any', 'facts', ';', 'slight'}	{'more', 'much', 'would', 'long'}
-0.0955731298	{'which', 'as'}	{'or', 'differ', 'what'}
-0.1174792339	{'between', 'is', ':'}	{'very', 'often', 'we', 'they', 'I'}
-0.1243695900	{'less', 'and', 'so', 'even', 'on', 'but'}	{'believe', 'do', 'have'}
+0.0310076903	{'must', 'can'}	{'to'}
+0.0313540183	{'great', 'my'}	{'in'}
+0.0332552017	{'.'}	{'its', 'different'}
+0.0339379568	{'such', 'been', 'manner'}	{'varieties', 'races'}
+0.0375097370	{','}	{'facts', 'plants'}
+0.0385969021	{'any', 'an'}	{'most', 'many'}
+0.0406709506	{'domestic', 'domesticated'}	{'would', 'more'}
+0.0418144478	{'much', 'long'}	{'of'}
+0.0438760018	{'facts', ',', 'plants'}	{'cannot', 'may'}
+0.0456463875	{'how', 'by', 'nearly'}	{'see', 'shall', 'from'}
+0.0457156104	{';', 'slight', 'short'}	{'wild', 'conditions'}
+0.0480189766	{'often', 'I', 'very'}	{'will', 'could'}
+0.0484632674	{'distinct', 'certain', 'a'}	{'one', 'other'}
+0.0488178431	{'not', 'cases', ')'}	{'its', '.', 'different'}
+0.0508021087	{',', 'may', 'facts', 'plants', 'cannot'}	{'at', 'animals'}
+0.0527400650	{'only', 'be', 'me'}	{'varieties', 'such', 'been', 'manner', 'races'}
+0.0589034095	{'their', 'all'}	{'several', 'our'}
+0.0617959019	{'at', ',', 'may', 'facts', 'plants', 'cannot', 'animals'}	{'state', 'nature', 'variation', 'breeds'}
+0.0552616204	{'state', ',', 'may', 'nature', 'cannot', 'animals', 'breeds', 'at', 'variation', 'facts', 'plants'}	{'structure', 'individuals', 'species'}
+0.0658567651	{'state', ',', 'may', 'species', 'nature', 'structure', 'cannot', 'animals', 'individuals', 'breeds', 'at', 'variation', 'facts', 'plants'}	{'subject', 'case', 'same'}
+0.0675520994	{';', 'slight', 'short', 'conditions', 'wild'}	{'In', 'The'}
+0.0682747955	{'under', 'for'}	{'has', 'with'}
+0.0705633383	{'and', 'so', 'but'}	{'they', 'we'}
+0.0742732137	{'state', ',', 'may', 'species', 'nature', 'same', 'structure', 'cannot', 'animals', 'individuals', 'breeds', 'at', 'variation', 'subject', 'case', 'facts', 'plants'}	{'most', 'many', 'any', 'an'}
+0.0780204544	{'state', 'may', 'species', 'same', 'structure', 'cannot', 'facts', 'breeds', 'at', 'case', 'nature', ',', 'any', 'individuals', 'animals', 'variation', 'many', 'subject', 'most', 'plants', 'an'}	{'there', 'it', 'It'}
+0.0794012021	{'certain', 'distinct', 'one', 'other', 'a'}	{'some', 'this'}
+0.0878522312	{'often', 'I', 'very', 'could', 'will'}	{'domestic', 'more', 'would', 'domesticated'}
+0.0897235496	{'state', 'may', 'species', 'same', 'structure', 'cannot', 'facts', 'breeds', 'at', 'case', 'it', 'nature', ',', 'any', 'there', 'individuals', 'animals', 'variation', 'many', 'It', 'subject', 'most', 'plants', 'an'}	{'on', 'less', 'even'}
+0.0929061692	{'we', 'they', 'and', 'so', 'but'}	{'as', 'which'}
+0.0960290923	{'state', 'may', 'species', 'same', 'even', 'structure', 'cannot', 'facts', 'breeds', 'at', 'less', 'case', 'it', 'nature', ',', 'any', 'on', 'there', 'individuals', 'animals', 'variation', 'many', 'It', 'subject', 'most', 'plants', 'an'}	{'or', 'what', 'differ'}
+0.1045552636	{'are', '(', 'than'}	{';', 'slight', 'short', 'In', 'conditions', 'The', 'wild'}
+0.1132370302	{'state', 'what', 'may', 'species', 'same', 'even', 'structure', 'cannot', 'facts', 'breeds', 'at', 'less', 'case', 'differ', 'it', 'nature', ',', 'any', 'on', 'there', 'individuals', 'animals', 'variation', 'or', 'many', 'It', 'subject', 'most', 'plants', 'an'}	{':', 'between', 'is'}
+0.1262999826	{'their', 'several', 'all', 'our'}	{'such', 'be', 'been', 'varieties', 'me', 'only', 'manner', 'races'}
+0.1303009677	{'state', 'what', 'may', 'species', 'same', 'even', 'structure', 'cannot', 'facts', 'breeds', 'at', 'less', 'case', 'differ', 'it', 'is', 'nature', ',', 'any', 'on', 'there', 'individuals', 'animals', 'variation', 'or', ':', 'between', 'many', 'It', 'subject', 'most', 'plants', 'an'}	{'have', 'believe', 'do'}
+0.1431239111	{'see', 'from', 'how', 'by', 'shall', 'nearly'}	{'under', 'for', 'has', 'with'}
+0.1507711817	{'we', 'they', 'and', 'as', 'so', 'which', 'but'}	{'that', 'when', 'if'}
+0.1541184175	{'often', 'I', 'very', 'would', 'will', 'more', 'could', 'domestic', 'domesticated'}	{'some', 'certain', 'distinct', 'one', 'this', 'other', 'a'}
+0.1945429018	{'at', 'is', 'it', 'nature', ',', 'any', 'or', 'between', 'believe', 'It', 'what', 'many', 'most', 'plants', 'state', 'may', 'species', 'same', 'even', 'structure', 'cannot', 'breeds', 'less', 'case', 'differ', 'do', 'on', 'there', 'individuals', 'animals', 'subject', 'variation', ':', 'have', 'facts', 'an'}	{'in', 'great', 'my'}
+0.2312977583	{'In', 'short', 'are', 'than', 'conditions', 'wild', '(', ';', 'slight', 'The'}	{'at', 'is', 'it', 'nature', ',', 'any', 'or', 'between', 'believe', 'It', 'what', 'many', 'most', 'plants', 'state', 'may', 'species', 'same', 'even', 'structure', 'cannot', 'breeds', 'less', 'case', 'differ', 'in', 'great', 'do', 'on', 'there', 'individuals', 'animals', 'subject', 'my', 'variation', ':', 'have', 'facts', 'an'}
+0.2368412199	{'as', 'and', 'that', 'when', 'which', 'we', 'they', 'if', 'so', 'but'}	{'under', 'shall', 'for', 'with', 'see', 'has', 'how', 'by', 'from', 'nearly'}
+0.2822783696	{'often', 'I', 'very', 'would', 'certain', 'one', 'this', 'will', 'other', 'more', 'a', 'some', 'could', 'distinct', 'domestic', 'domesticated'}	{'such', 'several', 'be', 'been', 'all', 'only', 'varieties', 'me', 'their', 'manner', 'our', 'races'}
+0.3280815688	{'as', 'under', 'and', 'for', 'when', 'with', 'they', 'see', 'if', 'how', 'by', 'so', 'shall', 'that', 'which', 'we', 'has', 'from', 'but', 'nearly'}	{'to', 'must', 'can'}
+0.4166811461	{'not', 'its', 'cases', '.', 'different', ')'}	{'I', 'very', 'other', 'will', 'several', 'be', 'only', 'a', 'some', 'varieties', 'me', 'could', 'distinct', 'such', 'their', 'domesticated', 'our', 'often', 'would', 'certain', 'one', 'been', 'all', 'more', 'domestic', 'this', 'manner', 'races'}
+0.4549794964	{'as', 'under', 'and', 'for', 'when', 'with', 'they', 'see', 'can', 'if', 'how', 'by', 'so', 'must', 'shall', 'that', 'which', 'we', 'to', 'has', 'from', 'but', 'nearly'}	{'much', 'of', 'long'}
+0.6056849397	{'as', 'under', 'and', 'for', 'when', 'with', 'they', 'see', 'can', 'if', 'how', 'by', 'so', 'must', 'shall', 'of', 'much', 'long', 'that', 'which', 'we', 'to', 'has', 'from', 'but', 'nearly'}	{'each', 'the', 'these'}
+0.6600600848	{'I', 'very', ')', 'other', 'will', 'a', 'some', 'different', 'me', 'would', 'certain', 'one', 'been', 'its', 'only', 'domestic', 'this', 'several', 'be', 'varieties', 'not', '.', 'could', 'distinct', 'such', 'domesticated', 'our', 'often', 'all', 'more', 'cases', 'their', 'manner', 'races'}	{'as', 'under', 'and', 'for', 'when', 'with', 'these', 'they', 'see', 'can', 'if', 'how', 'by', 'so', 'must', 'shall', 'of', 'the', 'much', 'long', 'that', 'which', 'we', 'to', 'has', 'each', 'from', 'but', 'nearly'}
+1.2347232435	{'than', 'facts', 'at', 'is', 'it', 'The', 'nature', ',', 'any', 'wild', '(', 'or', 'between', 'believe', 'It', 'what', 'many', 'most', 'plants', 'state', 'In', 'may', 'are', 'species', 'same', 'even', 'structure', 'cannot', 'conditions', 'breeds', ';', 'less', 'case', 'differ', 'slight', 'in', 'great', 'short', 'do', 'on', 'there', 'individuals', 'animals', 'my', 'variation', ':', 'have', 'subject', 'an'}	{'as', 'I', 'very', ')', 'other', 'will', 'a', 'some', 'different', 'me', 'if', 'of', 'so', 'the', 'much', 'would', 'long', 'certain', 'one', 'that', 'been', 'we', 'to', 'its', 'has', 'only', 'domestic', 'this', 'from', 'but', 'under', 'and', 'several', 'be', 'for', 'when', 'with', 'these', 'varieties', 'not', 'they', '.', 'see', 'could', 'distinct', 'such', 'how', 'by', 'must', 'domesticated', 'our', 'shall', 'often', 'nearly', 'all', 'more', 'which', 'cases', 'their', 'each', 'manner', 'can', 'races'}
