@@ -1,0 +1,8 @@
+% Metadata to be stored in PDF, see documentation of the pdfx package for more details.
+
+\Author{Andrej Jurčo}
+\Title{Data Lineage Analysis for Qlik Sense}
+\Keywords{data lineage\sep data flow\sep business intelligence\sep qlik sense}
+\Subject{Business Intelligence has become essential for all companies and organizations in the world over the past few years when it comes to decision-making and observing long-term trends. It often happens that Business Intelligence tools that are used become very complex over time and it can then be very difficult to make any changes. Data lineage solves this problem by visualizing data flows and showing relative dependencies. Manta Flow is the platform which creates such lineage which supports programming languages (Java, C#), databases (Oracle, MS SQL) or Business Intelligence tools (Cognos, Qlik Sense).
+The goal of this thesis was to implement a prototype of a scanner module for the Manta Flow platform, which would analyze data flows in Qlik Sense and create a data lineage graph from data sources to the presentation layer. This module extracts metadata necessary for the analysis, resolves the objects that are present in the Qlik Sense applications, and analyzes data flows in them. The resulting data lineage graph is then visualized by other components of the Manta Flow platform.}
+\Publisher{Charles University}
